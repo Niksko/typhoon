@@ -10,14 +10,10 @@ resource "matchbox_group" "container-linux-install" {
   }
 }
 
-// Set up a new matchbox group(s) here. Basic details:
-// * use a custom template that just does the lvm provisioning. This will allow for different devices to have different lvm layouts
-// * similar to how worker and controller groups already work, count over a map and line these up with custom profiles for each machine
-// * performed after os install, but before worker or controller configuration
-// * will need to add "storage=provisioned" (or similar) to the existing worker/controller group selectors
-// * new groups will have the "os=installed" selector
-// * scripts that currently curl the ignition endpoint with "&os=installed" will use "&os=install&storage=provisioned"
-// * new scripts that do the lvm install should pass the "&os=installed" param
+// Just need to update container linux configs to create additional partitions
+// Follow templates at https://coreos.com/ignition/docs/latest/examples.html#create-a-raid-enabled-data-volume
+// Either just format the root as btrfs and expand it across all hds
+// Or create a separate data partition on the second hard drive
 
 resource "matchbox_group" "controller" {
   count   = "${length(var.controller_names)}"
