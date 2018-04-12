@@ -10,6 +10,15 @@ resource "matchbox_group" "container-linux-install" {
   }
 }
 
+// Set up a new matchbox group(s) here. Basic details:
+// * use a custom template that just does the lvm provisioning. This will allow for different devices to have different lvm layouts
+// * similar to how worker and controller groups already work, count over a map and line these up with custom profiles for each machine
+// * performed after os install, but before worker or controller configuration
+// * will need to add "storage=provisioned" (or similar) to the existing worker/controller group selectors
+// * new groups will have the "os=installed" selector
+// * scripts that currently curl the ignition endpoint with "&os=installed" will use "&os=install&storage=provisioned"
+// * new scripts that do the lvm install should pass the "&os=installed" param
+
 resource "matchbox_group" "controller" {
   count   = "${length(var.controller_names)}"
   name    = "${format("%s-%s", var.cluster_name, element(var.controller_names, count.index))}"
