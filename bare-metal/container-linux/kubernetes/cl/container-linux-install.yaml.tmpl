@@ -40,6 +40,17 @@ storage:
             -i ignition.json
           udevadm settle
           systemctl reboot
+networkd:
+  units:
+    - name: 00-${network_device}.network
+      contents: |
+        [Match]
+        Name=${network_device}
+
+        [Network]
+        ${dns_server_string}
+        Address=${static_ip}/${subnet_mask}
+        Gateway=${gateway_ip}
 passwd:
   users:
     - name: core

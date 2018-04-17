@@ -92,6 +92,41 @@ variable "worker_install_disk" {
   description = "Disk device to which the install profiles should install Container Linux on worker machines (e.g. /dev/sda). Prefer persistent block device labels such as /dev/disk/by-id/ type labels"
 }
 
+variable "controller_network_device" {
+  type        = "list"
+  description = "Network device that should be configured for controller machines"
+}
+
+variable "worker_network_device" {
+  type        = "list"
+  description = "Network device that should be configured for worker machines"
+}
+
+variable "controller_static_ip" {
+  type        = "list"
+  description = "Static IP assignment for controller machines"
+}
+
+variable "worker_static_ip" {
+  type        = "list"
+  description = "Static IP assignment for worker machines"
+}
+
+variable "gateway_ip" {
+  type        = "string"
+  description = "Address of gateway server for all machines"
+}
+
+variable "subnet_mask" {
+  type        = "string"
+  description = "Subnet mask for all machines in number of bits (eg. for 10.0.0.1 and subnet mask of 255.255.255.0, CIDR would be 10.0.0.1/24, so use 24)"
+}
+
+variable "dns_servers" {
+  type        = "list"
+  description = "List of DNS servers for all machines (eg. [8.8.8.8, 8.8.4.4])"
+}
+
 variable "service_cidr" {
   description = <<EOD
 CIDR IPv4 range to assign Kubernetes services.
@@ -115,7 +150,6 @@ variable "cached_install" {
   default     = "false"
   description = "Whether Container Linux should PXE boot and install from matchbox /assets cache. Note that the admin must have downloaded the container_linux_version into matchbox assets."
 }
-
 
 variable "container_linux_oem" {
   type        = "string"

@@ -27,12 +27,20 @@ data "template_file" "container-linux-install-configs" {
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
   install_disk_list = "${concat(var.controller_install_disk, var.worker_install_disk)}"
+  network_device_list = "${concat(var.controller_network_device, var.worker_network_device)}"
+  static_ip_list = "${concat(var.controller_static_ip, var.worker_static_ip)}"
+  dns_server_networkd_entry_list = "${format("DNS=%s", var.dns_servers)}"
 
   vars {
     container_linux_channel = "${var.container_linux_channel}"
     container_linux_version = "${var.container_linux_version}"
     ignition_endpoint       = "${format("%s/ignition", var.matchbox_http_endpoint)}"
     install_disk            = "${element(install_disk_list, count.index)}"
+    network_device          = "${element(network_device_list, count.index)}"
+    static_ip               = "${element(static_ip_list, count.index)}"
+    dns_server_ip           = "${join("\n", dns_server_networkd_entry_list)}"
+    subnet_mask             = "${var.subnet_mask}"
+    gateway_ip              = "${var.gateway_ip}"
     container_linux_oem     = "${var.container_linux_oem}"
     ssh_authorized_key      = "${var.ssh_authorized_key}"
 
