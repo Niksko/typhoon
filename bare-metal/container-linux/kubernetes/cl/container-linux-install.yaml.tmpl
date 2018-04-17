@@ -48,7 +48,7 @@ networkd:
         Name=${network_device}
 
         [Network]
-        ${dns_server_string}
+        ${dns_server_entries}
         Address=${static_ip}/${subnet_mask}
         Gateway=${gateway_ip}
 passwd:

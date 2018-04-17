@@ -1,4 +1,11 @@
 // Container Linux Install profile (from release.core-os.net)
+locals {
+  install_disk_list = "${concat(var.controller_install_disks, var.worker_install_disks)}"
+  network_device_list = "${concat(var.controller_network_devices, var.worker_network_devices)}"
+  static_ip_list = "${concat(var.controller_static_ips, var.worker_static_ips)}"
+  dns_server_networkd_entry_list = "${format("DNS=%s", var.dns_servers)}"
+}
+
 resource "matchbox_profile" "container-linux-install" {
   count = "${length(var.controller_names) + length(var.worker_names)}"
   name  = "${format("%s-container-linux-install-%s", var.cluster_name, element(concat(var.controller_names, var.worker_names), count.index))}"
@@ -26,19 +33,14 @@ data "template_file" "container-linux-install-configs" {
 
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
-  install_disk_list = "${concat(var.controller_install_disks, var.worker_install_disks)}"
-  network_device_list = "${concat(var.controller_network_devices, var.worker_network_devices)}"
-  static_ip_list = "${concat(var.controller_static_ips, var.worker_static_ips)}"
-  dns_server_networkd_entry_list = "${format("DNS=%s", var.dns_servers)}"
-
   vars {
     container_linux_channel = "${var.container_linux_channel}"
     container_linux_version = "${var.container_linux_version}"
     ignition_endpoint       = "${format("%s/ignition", var.matchbox_http_endpoint)}"
-    install_disk            = "${element(install_disk_list, count.index)}"
-    network_device          = "${element(network_device_list, count.index)}"
-    static_ip               = "${element(static_ip_list, count.index)}"
-    dns_server_ip           = "${join("\n", dns_server_networkd_entry_list)}"
+    install_disk            = "${element(local.install_disk_list, count.index)}"
+    network_device          = "${element(local.network_device_list, count.index)}"
+    static_ip               = "${element(local.static_ip_list, count.index)}"
+    dns_server_entries      = "${join("\n", local.dns_server_networkd_entry_list)}"
     subnet_mask             = "${var.subnet_mask}"
     gateway_ip              = "${var.gateway_ip}"
     container_linux_oem     = "${var.container_linux_oem}"
@@ -78,13 +80,16 @@ data "template_file" "cached-container-linux-install-configs" {
 
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
-  install_disk_list = "${concat(var.controller_install_disks, var.worker_install_disks)}"
-
   vars {
     container_linux_channel = "${var.container_linux_channel}"
     container_linux_version = "${var.container_linux_version}"
     ignition_endpoint       = "${format("%s/ignition", var.matchbox_http_endpoint)}"
-    install_disk            = "${element(install_disk_list, count.index)}"
+    install_disk            = "${element(local.install_disk_list, count.index)}"
+    network_device          = "${element(local.network_device_list, count.index)}"
+    static_ip               = "${element(local.static_ip_list, count.index)}"
+    dns_server_entries      = "${join("\n", local.dns_server_networkd_entry_list)}"
+    subnet_mask             = "${var.subnet_mask}"
+    gateway_ip              = "${var.gateway_ip}"
     container_linux_oem     = "${var.container_linux_oem}"
     ssh_authorized_key      = "${var.ssh_authorized_key}"
 
