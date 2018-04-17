@@ -3,7 +3,7 @@ locals {
   install_disk_list = "${concat(var.controller_install_disks, var.worker_install_disks)}"
   network_device_list = "${concat(var.controller_network_devices, var.worker_network_devices)}"
   static_ip_list = "${concat(var.controller_static_ips, var.worker_static_ips)}"
-  dns_server_networkd_entry_list = "${format("DNS=%s", var.dns_servers)}"
+  dns_server_networkd_entry_list = "${formatlist("DNS=%s", var.dns_servers)}"
 }
 
 resource "matchbox_profile" "container-linux-install" {
