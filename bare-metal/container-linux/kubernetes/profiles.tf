@@ -26,11 +26,13 @@ data "template_file" "container-linux-install-configs" {
 
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
+  install_disk_list = "${concat(var.controller_install_disk, var.worker_install_disk)}"
+
   vars {
     container_linux_channel = "${var.container_linux_channel}"
     container_linux_version = "${var.container_linux_version}"
     ignition_endpoint       = "${format("%s/ignition", var.matchbox_http_endpoint)}"
-    install_disk            = "${var.install_disk}"
+    install_disk            = "${element(install_disk_list, count.index)}"
     container_linux_oem     = "${var.container_linux_oem}"
     ssh_authorized_key      = "${var.ssh_authorized_key}"
 
@@ -68,11 +70,13 @@ data "template_file" "cached-container-linux-install-configs" {
 
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
+  install_disk_list = "${concat(var.controller_install_disk, var.worker_install_disk)}"
+
   vars {
     container_linux_channel = "${var.container_linux_channel}"
     container_linux_version = "${var.container_linux_version}"
     ignition_endpoint       = "${format("%s/ignition", var.matchbox_http_endpoint)}"
-    install_disk            = "${var.install_disk}"
+    install_disk            = "${element(install_disk_list, count.index)}"
     container_linux_oem     = "${var.container_linux_oem}"
     ssh_authorized_key      = "${var.ssh_authorized_key}"
 

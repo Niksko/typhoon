@@ -82,6 +82,16 @@ variable "pod_cidr" {
   default     = "10.2.0.0/16"
 }
 
+variable "controller_install_disk" {
+  type        = "list"
+  description = "Disk device to which the install profiles should install Container Linux on controller machines (e.g. /dev/sda). Prefer persistent block device labels such as /dev/disk/by-id/ type labels"
+}
+
+variable "worker_install_disk" {
+  type        = "list"
+  description = "Disk device to which the install profiles should install Container Linux on worker machines (e.g. /dev/sda). Prefer persistent block device labels such as /dev/disk/by-id/ type labels"
+}
+
 variable "service_cidr" {
   description = <<EOD
 CIDR IPv4 range to assign Kubernetes services.
@@ -106,11 +116,6 @@ variable "cached_install" {
   description = "Whether Container Linux should PXE boot and install from matchbox /assets cache. Note that the admin must have downloaded the container_linux_version into matchbox assets."
 }
 
-variable "install_disk" {
-  type        = "string"
-  default     = "/dev/sda"
-  description = "Disk device to which the install profiles should install Container Linux (e.g. /dev/sda)"
-}
 
 variable "container_linux_oem" {
   type        = "string"
