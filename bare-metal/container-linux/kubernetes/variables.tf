@@ -82,32 +82,32 @@ variable "pod_cidr" {
   default     = "10.2.0.0/16"
 }
 
-variable "controller_install_disk" {
+variable "controller_install_disks" {
   type        = "list"
   description = "Disk device to which the install profiles should install Container Linux on controller machines (e.g. /dev/sda). Prefer persistent block device labels such as /dev/disk/by-id/ type labels"
 }
 
-variable "worker_install_disk" {
+variable "worker_install_disks" {
   type        = "list"
   description = "Disk device to which the install profiles should install Container Linux on worker machines (e.g. /dev/sda). Prefer persistent block device labels such as /dev/disk/by-id/ type labels"
 }
 
-variable "controller_network_device" {
+variable "controller_network_devices" {
   type        = "list"
   description = "Network device that should be configured for controller machines"
 }
 
-variable "worker_network_device" {
+variable "worker_network_devices" {
   type        = "list"
   description = "Network device that should be configured for worker machines"
 }
 
-variable "controller_static_ip" {
+variable "controller_static_ips" {
   type        = "list"
   description = "Static IP assignment for controller machines"
 }
 
-variable "worker_static_ip" {
+variable "worker_static_ips" {
   type        = "list"
   description = "Static IP assignment for worker machines"
 }

@@ -26,9 +26,9 @@ data "template_file" "container-linux-install-configs" {
 
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
-  install_disk_list = "${concat(var.controller_install_disk, var.worker_install_disk)}"
-  network_device_list = "${concat(var.controller_network_device, var.worker_network_device)}"
-  static_ip_list = "${concat(var.controller_static_ip, var.worker_static_ip)}"
+  install_disk_list = "${concat(var.controller_install_disks, var.worker_install_disks)}"
+  network_device_list = "${concat(var.controller_network_devices, var.worker_network_devices)}"
+  static_ip_list = "${concat(var.controller_static_ips, var.worker_static_ips)}"
   dns_server_networkd_entry_list = "${format("DNS=%s", var.dns_servers)}"
 
   vars {
@@ -78,7 +78,7 @@ data "template_file" "cached-container-linux-install-configs" {
 
   template = "${file("${path.module}/cl/container-linux-install.yaml.tmpl")}"
 
-  install_disk_list = "${concat(var.controller_install_disk, var.worker_install_disk)}"
+  install_disk_list = "${concat(var.controller_install_disks, var.worker_install_disks)}"
 
   vars {
     container_linux_channel = "${var.container_linux_channel}"
