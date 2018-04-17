@@ -117,6 +117,11 @@ data "template_file" "controller-configs" {
     k8s_dns_service_ip    = "${module.bootkube.kube_dns_service_ip}"
     cluster_domain_suffix = "${var.cluster_domain_suffix}"
     ssh_authorized_key    = "${var.ssh_authorized_key}"
+    network_device        = "${element(var.controller_network_devices, count.index)}"
+    static_ip             = "${element(var.controller_static_ips, count.index)}"
+    dns_server_entries    = "${join("\n", local.dns_server_networkd_entry_list)}"
+    subnet_mask           = "${var.subnet_mask}"
+    gateway_ip            = "${var.gateway_ip}"
 
     # Terraform evaluates both sides regardless and element cannot be used on 0 length lists
     networkd_content = "${length(var.controller_networkds) == 0 ? "" : element(concat(var.controller_networkds, list("")), count.index)}"
@@ -140,6 +145,11 @@ data "template_file" "worker-configs" {
     k8s_dns_service_ip    = "${module.bootkube.kube_dns_service_ip}"
     cluster_domain_suffix = "${var.cluster_domain_suffix}"
     ssh_authorized_key    = "${var.ssh_authorized_key}"
+    network_device        = "${element(var.worker_network_devices, count.index)}"
+    static_ip             = "${element(var.worker_static_ips, count.index)}"
+    dns_server_entries    = "${join("\n", local.dns_server_networkd_entry_list)}"
+    subnet_mask           = "${var.subnet_mask}"
+    gateway_ip            = "${var.gateway_ip}"
 
     # Terraform evaluates both sides regardless and element cannot be used on 0 length lists
     networkd_content = "${length(var.worker_networkds) == 0 ? "" : element(concat(var.worker_networkds, list("")), count.index)}"

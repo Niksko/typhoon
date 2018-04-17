@@ -160,7 +160,16 @@ storage:
             --dns=host \
             --exec=/bootkube -- start --asset-dir=/assets "$@"
 networkd:
-  ${networkd_content}
+  units:
+    - name: 00-${network_device}.network
+      contents: |
+        [Match]
+        Name=${network_device}
+
+        [Network]
+        ${dns_server_entries}
+        Address=${static_ip}/${subnet_mask}
+        Gateway=${gateway_ip}
 passwd:
   users:
     - name: core

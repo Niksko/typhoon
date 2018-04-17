@@ -95,7 +95,16 @@ storage:
         inline: |
           fs.inotify.max_user_watches=16184
 networkd:
-  ${networkd_content}
+  units:
+    - name: 00-${network_device}.network
+      contents: |
+        [Match]
+        Name=${network_device}
+
+        [Network]
+        ${dns_server_entries}
+        Address=${static_ip}/${subnet_mask}
+        Gateway=${gateway_ip}
 passwd:
   users:
     - name: core
